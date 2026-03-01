@@ -10,7 +10,13 @@ Questo componente permette di:
 - Gestire fino a 40 oggetti (sensori/interruttori) da una Dashboard Web.
 - Integrare tutto in Home Assistant via MQTT con auto-discovery.
 
+
+
   <img width="1170" height="787" alt="image" src="https://github.com/user-attachments/assets/376ce582-993a-4a71-8b6f-301fb8e66289" />
+
+
+  <img width="606" height="798" alt="image" src="https://github.com/user-attachments/assets/b939758f-c628-446c-8717-3497c4a37b07" />
+
 
 
 ### Installazione
