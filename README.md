@@ -8,3 +8,21 @@ Questo componente permette di:
 
 ### Installazione
 Copia la cartella `Esp32_WebInterface` nella cartella `components` del tuo progetto ESP-IDF.
+
+# 🚀 ESP32 Smart Centralina (Web Interface + MQTT)
+**Sviluppata da: Suma Marco**
+
+Questo progetto trasforma un ESP32 in una centralina domotica completa con interfaccia web moderna.
+
+## 🌐 Funzionalità Web
+- **Dashboard**: Visualizzazione stati e controllo switch in tempo reale.
+- **Configurazione MQTT**: Pagina dedicata per IP Broker, Porta e Credenziali.
+- **Status Link**: Icona dinamica 🔗 (connesso) / 🔓 (scollegato).
+- **Reset Intelligenti**: Pulsanti separati per reset Dati, WiFi e MQTT.
+
+## 🏠 Integrazione Home Assistant
+Grazie al protocollo MQTT con **Auto-Discovery**, la centralina appare automaticamente tra i dispositivi di Home Assistant senza dover scrivere codice YAML.
+
+## 🛠️ Requisiti
+- ESP-IDF v5.x
+- Broker MQTT (es. Mosquitto o add-on di Home Assistant)
