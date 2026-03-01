@@ -1,3 +1,7 @@
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+![Framework: ESP-IDF](https://img.shields.io/badge/Framework-ESP--IDF-blue.svg)
+![Platform: ESP32](https://img.shields.io/badge/Platform-ESP32-red.svg)
+
 # ESP32 WebInterface & Home Assistant
 **Sistema di controllo domotico professionale per ESP32.**
 
