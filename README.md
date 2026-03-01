@@ -10,6 +10,9 @@ Questo componente permette di:
 - Gestire fino a 40 oggetti (sensori/interruttori) da una Dashboard Web.
 - Integrare tutto in Home Assistant via MQTT con auto-discovery.
 
+  <img width="1170" height="787" alt="image" src="https://github.com/user-attachments/assets/376ce582-993a-4a71-8b6f-301fb8e66289" />
+
+
 ### Installazione
 Copia la cartella `Esp32_WebInterface` nella cartella `components` del tuo progetto ESP-IDF.
 
