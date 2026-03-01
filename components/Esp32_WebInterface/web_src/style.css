@@ -1,0 +1,496 @@
+/* Suma Marco - 2026-03-21.
+   Stile CSS per l'interfaccia web dell'Esp32, con supporto per modalità chiara e scura */
+
+/* Stile CSS per l'interfaccia web dell'Esp32, con supporto per modalità chiara e scura */
+:root {
+    --bg-color: #e9ecef;
+    --card-main-bg: #ffffff;
+    --item-bg: #ffffff;
+    --primary: #3a77f3;
+    --secondary: #4e4c91;
+    --accent: #3703af;
+    --success: #43e760;
+    --text: #2f3542;
+    --border: #ced4da;
+}
+
+/* Modalità scura, con colori più scuri per sfondo, card, testo e bordi */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-color: #121212;
+        --card-main-bg: #1e1e1e;
+        --item-bg: #2d2d2d;
+        --text: #e9ecef;
+        --border: #404040;
+    }
+}
+
+/* Stile base per il body, con font moderno, sfondo, colore del testo e layout centrato */
+body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg-color);
+    color: var(--text);
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    padding: 15px;
+}
+
+/* Stile per la card principale, con sfondo, padding, bordo stondato e ombra */
+.card {
+    width: 100%;
+    max-width: 1100px;
+    background: var(--card-main-bg);
+    padding: 20px;
+    border-radius: 24px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+}
+
+/* Stile per il titolo principale, con allineamento al centro, colore primario e margine inferiore */
+h1 {
+    text-align: center;
+    color: var(--primary);
+    margin-bottom: 25px;
+}
+
+/* Layout a due colonne per schermi più grandi */
+.container-layout {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: 20px;
+}
+
+/* Layout a colonna singola per schermi più piccoli */
+@media (max-width: 900px) {
+    .container-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Stile per i container principali, con layout a griglia e gap tra gli elementi */
+#main,
+#sidebar-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 15px;
+}
+
+/* Stile base per oggetto e container_set, con sfondo, bordo, padding e transizione */
+.oggetto,
+.container_set {
+    background: var(--item-bg);
+    border: 1px solid var(--border);
+    padding: 20px;
+    border-radius: 18px;
+    transition: all 0.25s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    box-sizing: border-box;
+}
+
+/* Hover effect per oggetto e container_set */
+.oggetto:hover {
+    transform: translateY(-4px);
+    border-color: var(--primary);
+}
+
+/* Stile per la chiave, con font-weight maggiore e colore secondario */
+.key {
+    font-weight: 600;
+    color: var(--secondary);
+    margin-left: 5px;
+}
+
+/* Stile per il valore, con dimensione maggiore e colore primario */
+.value {
+    font-size: 1.3rem;
+    color: var(--primary);
+    font-weight: bold;
+    float: right;
+}
+
+/* Stile per la wrapper dei dettagli */
+.wrapper {
+    display: flex;
+    background: var(--secondary);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-top: 15px;
+    padding: 3px;
+}
+
+/* Stile base per tutti gli span all'interno della wrapper */
+.wrapper span {
+    padding: 10px 4px;
+    color: white;
+    cursor: pointer;
+    font-size: 0.8rem;
+    flex: 1;
+    text-align: center;
+    font-weight: bold;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Stile specifico per il numero all'interno della wrapper */
+.wrapper span.num {
+    background: var(--accent);
+    font-size: 1.1rem;
+    min-width: 85px;
+    flex: 2;
+    border-right: none;
+    font-family: monospace;
+}
+
+/* Stile base per tutti i bottoni */
+button {
+    border: none;
+    border-radius: 10px;
+    padding: 12px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+    width: 100%;
+}
+
+/* Stile per il bottone set con effetto di hover */
+.bottone_set {
+    background: #dee2e6;
+    color: var(--text);
+    margin-bottom: 10px;
+}
+
+/* Hover effect per il bottone set */
+.bottone_set:hover {
+    background: var(--primary);
+    color: white;
+}
+
+/* Stile per il bottone aus con effetto di pressione */
+.bottone_aus {
+    background: var(--success);
+    color: white;
+    margin-top: 8px;
+}
+
+/* Effetto di pressione per il bottone aus */
+.bottone_dinamico {
+    background: var(--accent);
+    color: white;
+    box-shadow: 0 4px 0 #250275;
+    margin-top: 5px;
+}
+
+/* Effetto di pressione per il bottone dinamico */
+.bottone_dinamico:active {
+    transform: translateY(3px);
+    box-shadow: none;
+}
+
+/* Stile per la sezione di debug */
+.debug {
+    background: #1a1a1a;
+    color: #43e760;
+    font-family: monospace;
+    width: 100%;
+    border-radius: 12px;
+    padding: 12px;
+    box-sizing: border-box;
+    font-size: 0.85rem;
+    border: 1px solid #333;
+}
+
+/* Stile per gli input di testo e password */
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--bg-color);
+    color: var(--text);
+    box-sizing: border-box;
+}
+
+/* Stile per il toggle switch */
+input[type="checkbox"] {
+    width: 40px;
+    height: 20px;
+    appearance: none;
+    background: #ccc;
+    border-radius: 20px;
+    position: relative;
+    cursor: pointer;
+    transition: 0.3s;
+    float: right;
+}
+
+/* Cambia il colore del toggle quando è attivo */
+input[type="checkbox"]:checked {
+    background: var(--success);
+}
+
+/* Stile per la pallina del toggle */
+input[type="checkbox"]::before {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background: white;
+    border-radius: 50%;
+    top: 2px;
+    left: 2px;
+    transition: 0.3s;
+}
+
+/* Sposta la pallina del toggle quando è attivo */
+input[type="checkbox"]:checked::before {
+    left: 22px;
+}
+
+/* Stile per le emoji nei dettagli */
+.emoji {
+    font-style: normal;
+    margin-right: 5px;
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+/* Stile per il contenitore della barra di progresso */
+.progress-container {
+    width: 100%;
+    height: 24px;
+    /* Altezza fissa generosa */
+    background-color: #dee2e6;
+    /* Grigio chiaro di fondo */
+    border-radius: 12px;
+    margin-top: 15px;
+    display: none;
+    /* Gestito dal JS */
+    overflow: hidden;
+    /* Fondamentale per stondare la barra interna */
+    border: 1px solid var(--border);
+}
+
+/* Stile per la barra di progresso animata */
+.progress-bar {
+    width: 0%;
+    height: 100%;
+    /* Prende tutta l'altezza del contenitore */
+    background-color: var(--success);
+    background-image: linear-gradient(45deg, rgba(255, 255, 255, .15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%, transparent 75%, transparent);
+    background-size: 40px 40px;
+    transition: width 0.3s ease;
+    animation: progress-bar-stripes 1s linear infinite;
+}
+
+/* Animazione per le strisce della barra di progresso */
+@keyframes progress-bar-stripes {
+    from {
+        background-position: 40px 0;
+    }
+
+    to {
+        background-position: 0 0;
+    }
+}
+
+/* Rimuove il marker predefinito dei dettagli */
+details summary::-webkit-details-marker {
+    display: none;
+}
+
+/* Stile per il summary dei dettagli */
+details summary {
+    list-style: none;
+    outline: none;
+    transition: background 0.3s;
+}
+
+/* Hover effect per il summary dei dettagli. */
+details summary:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 12px;
+}
+
+/* Testo dinamico espandi/riduci */
+.toggle-text {
+    margin-left: auto;
+    font-size: 0.7rem;
+    opacity: 0.6;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+/* Testo che cambia dinamicamente usando ::before */
+.toggle-text::before {
+    content: "espandi";
+}
+
+/* Cambia il testo quando il dettaglio è aperto */
+details[open] .toggle-text::before {
+    content: "riduci";
+}
+
+/* Emoji che ruota e ingrandisce quando il dettaglio è aperto */
+details[open] summary .emoji {
+    transform: rotate(20deg) scale(1.2);
+}
+
+/* Stile per la Select delle reti Wi-Fi */
+select#wifi_ssid_select {
+    width: 100%;
+    height: 45px;
+    padding: 0 15px;
+    padding-right: 40px;
+    /* Spazio per la freccia custom */
+    border-radius: 12px;
+    border: 2px solid var(--border);
+    background: var(--card-main-bg);
+    color: var(--text);
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+
+    /* Rimuove lo stile brutto di Windows/Android */
+    appearance: none;
+    -webkit-appearance: none;
+
+    /* Aggiunge la freccia personalizzata blu */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%233a77f3' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 18px;
+
+    transition: all 0.2s ease;
+}
+
+/* Focus state per la Select delle reti Wi-Fi */
+select#wifi_ssid_select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(58, 119, 243, 0.1);
+}
+
+/* Stile per l'icona dell'occhio nella password Wi-Fi */
+#togglePassword:hover {
+    opacity: 1 !important;
+    transform: translateY(-50%) scale(1.1);
+}
+
+/* Stile per il contenitore della casella di rinomina, con input e bottoni OK/Annulla */
+.rename-container {
+    margin-top: 10px;
+    padding: 8px;
+    background: #f8f9fa;
+    border-radius: 4px;
+    border: 1px solid #dee2e6;
+}
+
+/* Stile per l'input di testo all'interno della casella di rinomina */
+.rename-container input {
+    width: 100%;
+    padding: 4px;
+    margin-bottom: 5px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    font-size: 0.9em;
+}
+
+/* 1. Bottoni piccoli per la RINOMINA (restano piccoli e discreti) */
+.rename-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 5px;
+}
+
+.rename-buttons .btn-ok,
+.rename-buttons .btn-cancel {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 2px 8px;
+    cursor: pointer;
+    border-radius: 4px;
+    height: auto !important;
+    /* Impedisce di diventare giganti */
+    line-height: normal;
+}
+
+.rename-buttons .btn-cancel {
+    background: #dc3545;
+}
+
+/* 2. Bottoni della DASHBOARD (quelli che devono essere allineati e belli) */
+.grid-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+/* Applichiamo lo stile "moderno" solo ai tasti grandi di controllo */
+.bottone_aus,
+.bottone_set,
+.grid-buttons .btn-ok,
+.grid-buttons .btn-cancel,
+.btn-warning {
+    height: 42px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 15px;
+    box-sizing: border-box;
+    border-radius: 10px !important;
+    cursor: pointer;
+    border: none;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+/* Colori per i tasti grandi */
+.btn-warning {
+    background: #f39c12;
+    color: white;
+}
+
+.btn-ok {
+    background: #28a745;
+    color: white;
+}
+
+.btn-cancel {
+    background: #dc3545;
+    color: white;
+}
+
+/* 3. Stili per numeretti e reset (questi vanno bene così) */
+.btn-step {
+    background: #eeeeee;
+    padding: 4px 6px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85em;
+    user-select: none;
+    transition: background 0.2s;
+}
+
+.btn-reset {
+    width: 35px;
+    height: 35px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+/* Forza i bottoni dentro grid-buttons a ignorare margini esterni e ad occupare tutta l'altezza */
+.grid-buttons button {
+    margin: 0 !important;
+    /* Rimuove margini che causano lo sbalzo */
+    align-self: stretch;
+    /* Li costringe ad avere la stessa altezza */
+    min-height: 42px;
+    /* Altezza minima di sicurezza */
+}

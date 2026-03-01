@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:,">
+    <title>ESP32 Dashboard</title>
+    <style>
+        /*CSS_HERE*/
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <h1 id="titolo">🤖 Dashboard</h1>
+        <div class="container-layout">
+            <div id="main"></div>
+            <div id="sidebar">
+                <div><em class="emoji">📟</em><span class="key">System Log</span>
+                    <textarea id="system_log" class="debug" rows="10" readonly></textarea>
+                    <button class="bottone_set" style="margin-top:10px"
+                        onclick="document.getElementById('system_log').textContent=''">🗑️ Pulisci Log</button>
+                </div>
+
+                <div class="container_set" style="border-top: 3px solid var(--secondary); padding: 0;">
+                    <details>
+                        <summary
+                            style="cursor: pointer; padding: 15px; font-weight: bold; color: var(--secondary); display: flex; align-items: center;">
+                            <em class="emoji">⚙️</em> Gestione Sistema
+                            <span class="toggle-text"></span>
+                        </summary>
+                        <div style="padding: 0 15px 15px 15px;">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                                <button class="bottone_set" id="memorizzaDati">💾 Salva Dati</button>
+                                <button class="bottone_set" id="resetEsp32">🔄 Riavvia ESP</button>
+                            </div>
+                            <button class="bottone_set" id="azzeraDati"
+                                style="background-color: #ff4757; color: white; margin-top: 5px;">🗑️ Reset
+                                Dati</button>
+                            <div
+                                style="margin-top:15px; padding-top:10px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+                                <span style="font-size: 0.8rem;">Refresh:</span>
+                                <select id="refresh" onchange="cambiaIntervallo()"
+                                    style="padding: 3px; border-radius: 5px;">
+                                    <option value="1000">1s</option>
+                                    <option value="3000">3s</option>
+                                    <option value="500">0.5s</option>
+                                </select>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+
+                <div id="wifi_container" class="container_set"
+                    style="border-top: 3px solid var(--primary); padding: 0;">
+                    <details>
+                        <summary
+                            style="cursor: pointer; padding: 15px; font-weight: bold; color: var(--primary); display: flex; align-items: center;">
+                            <div style="flex: 1; display: flex; align-items: center;">
+                                <em class="emoji">📶</em> Wi-Fi
+                            </div>
+
+                            <span id="wifi_rssi"
+                                style="font-size: 0.85rem; font-family: monospace; opacity: 0.8; margin-right: 15px;">
+                                -- dBm
+                            </span>
+
+                            <span class="toggle-text"
+                                style="font-size: 0.75rem; font-weight: normal; opacity: 0.6;"></span>
+                        </summary>
+                        <div id="wifi_setup_area" style="padding: 0 15px 15px 15px;">
+                            <select id="wifi_ssid_select" style="width:100%; margin-bottom:10px;">
+                                <option value="">Scansiona...</option>
+                            </select>
+                            <div style="position: relative;">
+                                <input type="password" id="wifi_pass_input" placeholder="Password WiFi">
+                                <span onclick="togglePass('wifi_pass_input', this)"
+                                    style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;">
+                                    👁️
+                                </span>
+                            </div>
+                            <div class="grid-buttons">
+                                <button class="bottone_aus" onclick="connettiWiFi()">🔗 CONNETTI</button>
+                                <button class="bottone_set" id="btn_scan" onclick="scansionaWiFi()">🔍 SCAN</button>
+                            </div>
+                            <button class="btn-cancel btn-warning" onclick="resetWiFi()"
+                                style="width:100%; margin-top:10px;">
+                                🗑️ CANCELLA WIFI
+                            </button>
+                        </div>
+                    </details>
+                </div>
+                <div id="mqtt_container" class="container_set" style="border-top: 3px solid var(--accent); padding: 0;">
+                    <details>
+                        <summary
+                            style="cursor: pointer; padding: 15px; font-weight: bold; color: var(--accent); display: flex; align-items: center;">
+                            <div style="flex: 1; display: flex; align-items: center;">
+                                <em class="emoji">📡</em> MQTT Broker
+                            </div>
+                            <span id="mqtt_status" style="font-size: 0.9rem; margin-right: 15px;"></span>
+                            <span class="toggle-text"
+                                style="font-size: 0.75rem; font-weight: normal; opacity: 0.6;"></span>
+                        </summary>
+
+                        <div style="padding: 0 15px 15px 15px;">
+                            <div
+                                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding: 10px; background: rgba(0,0,0,0.03); border-radius: 8px;">
+                                <span>Abilita Connessione</span>
+                                <label class="switch">
+                                    <input type="checkbox" id="mqtt_en" onchange="toggleMqtt(this.checked)">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+
+                        </div>
+                        <div style="padding: 0 15px 15px 15px;">
+                            <input type="text" id="mqtt_host" placeholder="Broker IP (es. 192.168.1.50)"
+                                style="margin-bottom:8px;">
+                            <input type="text" id="mqtt_port" placeholder="Porta (es. 1883)" style="margin-bottom:8px;"
+                                value="1883">
+                            <input type="text" id="mqtt_user" placeholder="Username (opzionale)"
+                                style="margin-bottom:8px;">
+                            <div style="position: relative; margin-bottom: 10px;">
+                                <input type="password" id="mqtt_pass" placeholder="Password (opzionale)">
+                                <span onclick="togglePass('mqtt_pass', this)"
+                                    style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;">
+                                    👁️
+                                </span>
+                            </div>
+                            <div class="grid-buttons">
+                                <button class="btn-ok" onclick="salvaMQTT()">💾 SALVA</button>
+                                <button class="btn-cancel btn-warning" onclick="resetMQTT()">🗑️ RESET</button>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="container_set" style="border-top: 3px solid var(--success); padding: 0;">
+                    <details>
+                        <summary
+                            style="cursor: pointer; padding: 15px; font-weight: bold; color: var(--success); display: flex; align-items: center;">
+                            <em class="emoji">🚀</em> OTA Update
+                            <span class="toggle-text"></span>
+                        </summary>
+                        <div style="padding: 0 15px 15px 15px; text-align: center;">
+                            <input type="file" id="ota_file" style="display:none" accept=".bin" onchange="startOTA()">
+                            <button onclick="document.getElementById('ota_file').click()" class="bottone_aus">Seleziona
+                                .bin</button>
+                            <div id="ota_progress_container" class="progress-container">
+                                <div id="ota_progress_bar" class="progress-bar"></div>
+                            </div>
+                            <div id="ota_status" style="font-size: 0.75rem; margin-top: 8px;"></div>
+                        </div>
+                    </details>
+                </div>
+                <div id="count_container"></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        //JS_HERE
+    </script>
+</body>
+
+</html>
