@@ -1,0 +1,9 @@
+version: "1.0.0"
+description: "Interfaccia Web professionale per ESP32 con integrazione MQTT Home Assistant Discovery"
+url: "https://github.com/TUO_UTENTE/NOME_REPO"
+maintainers:
+  - "Suma Marco"
+targets:
+  - esp32
+  - esp32s3
+  - esp32c3
