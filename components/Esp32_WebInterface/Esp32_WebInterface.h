@@ -180,6 +180,9 @@ extern "C"
     // Invia lo stato di un singolo oggetto al broker MQTT.
     void WebInterface_publishState(WebInterface_t *self, int indice);
 
+    // pubblica lo sato di una oggetto passato by nome
+    bool WebInterface_publishStateByName(WebInterface_t *self, const char *_nome);
+
     // Invia lo stato di tutti gli oggetti configurati con HA = true.
     void WebInterface_publishAllState(WebInterface_t *self);
 
