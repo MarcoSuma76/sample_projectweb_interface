@@ -142,13 +142,22 @@ void WebInterface_publishState(WebInterface_t *self, int indice)
     esp_mqtt_client_publish(self->mqtt_client, obj->state_topic, val, 0, 1, 1);
 }
 
-// pubblica lo sato di una oggetto passato by nome
+// pubblica lo stato di un oggetto passato attraverso il nome
 bool WebInterface_publishStateByName(WebInterface_t *self, const char *_nome)
 {
-    //
+    // 3. Gestione e SANIFICAZIONE del nome
+    char nome_pulito[MAX_NOME];
+    strncpy(nome_pulito, _nome, MAX_NOME - 1);
+    nome_pulito[MAX_NOME - 1] = '\0';
+
+    // assicuriamoci che il nome sia pulito da caratteri che potrebbero creare problemi nel web (es. '|')
+    // e con home assistant (es. spazi)
+    // --- DISCRIMINAZIONE SANIFICAZIONE ---
+    WebInterface_Sanitize_name(nome_pulito);
+
     for (int i = 0; i < self->num_oggetti; i++)
     {
-        if (strcmp(self->oggetti[i].nome, _nome) == 0)
+        if (strcmp(self->oggetti[i].nome, nome_pulito) == 0)
         {
             WebInterface_publishState(self, i);
             return true;
