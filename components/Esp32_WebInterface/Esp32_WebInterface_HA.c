@@ -142,6 +142,21 @@ void WebInterface_publishState(WebInterface_t *self, int indice)
     esp_mqtt_client_publish(self->mqtt_client, obj->state_topic, val, 0, 1, 1);
 }
 
+// pubblica lo sato di una oggetto passato by nome
+bool WebInterface_publishStateByName(WebInterface_t *self, const char *_nome)
+{
+    //
+    for (int i = 0; i < self->num_oggetti; i++)
+    {
+        if (strcmp(self->oggetti[i].nome, _nome) == 0)
+        {
+            WebInterface_publishState(self, i);
+            return true;
+        }
+    }
+    return false;
+}
+
 // Questa funzione pubblica lo stato di tutti gli oggetti esposti a Home Assistant (chiamata ad esempio all'avvio o alla riconnessione)
 void WebInterface_publishAllState(WebInterface_t *self)
 {
@@ -276,6 +291,7 @@ void WebInterface_StartMQTT(WebInterface_t *self)
         ESP_LOGD("MQTT", "Task di refresh già attivo, salto creazione.");
     }
 }
+
 // Task che si occupa di inviare periodicamente i dati su MQTT (stato e discovery)
 // Viene eseguito in loop e rispetta l'intervallo definito in self->mqtt_refresh
 // Inoltre, controlla lo stato del Wi-Fi e del broker per evitare di inviare dati quando non è possibile
