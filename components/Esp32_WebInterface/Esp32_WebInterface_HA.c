@@ -121,13 +121,13 @@ bool WebInterface_publishDiscovery(WebInterface_t *self, int indice)
 // --- GESTIONE STATI ---
 
 // Questa funzione pubblica lo stato attuale di un oggetto su MQTT, se è esposto a Home Assistant
-void WebInterface_publishState(WebInterface_t *self, int indice)
+bool WebInterface_publishState(WebInterface_t *self, int indice)
 {
     if (!self->HA_Set || self->mqtt_client == NULL)
-        return;
+        return false;
     Oggetto_t *obj = &self->oggetti[indice];
     if (!obj->HA)
-        return;
+        return false;
 
     const char *val;
     if (strcmp(obj->ha_tipo, "binary_sensor") == 0 || strcmp(obj->ha_tipo, "switch") == 0)
@@ -140,6 +140,8 @@ void WebInterface_publishState(WebInterface_t *self, int indice)
     }
 
     esp_mqtt_client_publish(self->mqtt_client, obj->state_topic, val, 0, 1, 1);
+
+    return true;
 }
 
 // pubblica lo stato di un oggetto passato attraverso il nome
