@@ -83,6 +83,7 @@ extern "C"
         TaskHandle_t mqtt_task_handle;        //  Handle del task per il refresh MQTT
         bool mqtt_enabled;                    // Flag per indicare se il client MQTT è abilitato/disabilitato
         bool mqtt_connected;                  // Flag per indicare se il client MQTT è connesso
+        bool ota_in_progress;                 // flag true quando l'OTA è attivo
         char system_log[2048];                // Buffer per il log di sistema, con dimensione aumentata a 2048 caratteri
         char mqtt_uid[MAX_D_UID];             // ID univoco generato dal MAC, usato per MQTT Discovery
     } WebInterface_t;
@@ -180,7 +181,7 @@ extern "C"
     // Invia lo stato di un singolo oggetto al broker MQTT.
     bool WebInterface_publishState(WebInterface_t *self, int indice);
 
-    // pubblica lo sato di una oggetto passato by nome
+    // pubblica lo stato di un oggetto passato attraverso il nome
     bool WebInterface_publishStateByName(WebInterface_t *self, const char *_nome);
 
     // Invia lo stato di tutti gli oggetti configurati con HA = true.

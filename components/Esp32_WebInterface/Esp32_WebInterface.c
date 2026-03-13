@@ -63,6 +63,7 @@ void WebInterface_Init(WebInterface_t *self, const char *titolo_val)
     // --- 4. STATI FINALI ---
     self->HA_Set = false;
     self->mqtt_client = NULL;
+    self->ota_in_progress = false;
 
     printf("[WEB INTERFACE] Hardware pronto e oggetti base registrati.\n");
 }

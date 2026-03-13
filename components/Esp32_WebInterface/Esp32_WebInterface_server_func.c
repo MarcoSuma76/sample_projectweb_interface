@@ -541,7 +541,9 @@ esp_err_t ota_update_post_handler(httpd_req_t *req)
 {
     char buf[1024];
     esp_ota_handle_t update_handle = 0;
+
     const esp_partition_t *update_partition = esp_ota_get_next_update_partition(NULL);
+
     WebInterface_t *self = (WebInterface_t *)req->user_ctx;
 
     if (update_partition == NULL)
@@ -550,6 +552,8 @@ esp_err_t ota_update_post_handler(httpd_req_t *req)
         return ESP_FAIL;
     }
 
+    // ATTIVA IL BLOCCO
+    self->ota_in_progress = true;
     WebInterface_Log(self, "OTA", "Inizio ricezione firmware...");
 
     esp_err_t err = esp_ota_begin(update_partition, OTA_SIZE_UNKNOWN, &update_handle);
@@ -591,6 +595,9 @@ esp_err_t ota_update_post_handler(httpd_req_t *req)
         esp_ota_write(update_handle, buf, recv_len);
         remaining -= recv_len;
     }
+
+    // DISATTIVA IL BLOCCO prima del riavvio (o in caso di fine operazione)
+    self->ota_in_progress = false;
 
     if (esp_ota_end(update_handle) != ESP_OK || esp_ota_set_boot_partition(update_partition) != ESP_OK)
     {
