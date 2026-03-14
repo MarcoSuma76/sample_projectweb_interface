@@ -33,25 +33,27 @@ endif()
 # Questo farà sì che il martello riesegua lo script Python.
 set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS ${WEB_SOURCES})
 
-# 5. Registrazione del componente (lista pulita senza commenti interni)
+# 5. Registrazione del componente WebInterface e delle sue dipendenze
 idf_component_register(
     SRCS 
-        "Esp32_WebInterface_wifi.c"
-        "Esp32_WebInterface.c"
-        "Esp32_WebInterface_oggetti_func.c"
-        "Esp32_WebInterface_server_func.c"
-        "Esp32_WebInterface_interfacciamento.c"
-        "Esp32_WebInterface_eeprom_func.c"
-        "Esp32_WebInterface_HA.c"
-        "Esp32_WebInterface_dns.c"
-    INCLUDE_DIRS "."
+        "Esp32_WebInterface_wifi.c"            # Gestione driver WiFi (STA/AP)
+        "Esp32_WebInterface.c"                 # Logica principale del componente
+        "Esp32_WebInterface_oggetti_func.c"    # Funzioni per la gestione degli oggetti
+        "Esp32_WebInterface_server_func.c"     # Handlers per il Web Server HTTP
+        "Esp32_WebInterface_interfacciamento.c"# Logica di scambio dati tra i dati da e verso l'interfaccia
+        "Esp32_WebInterface_eeprom_func.c"     # Salvataggio parametri su NVS (Simulazione EEPROM)
+        "Esp32_WebInterface_HA.c"              # Integrazione protocollo Home Assistant (Discovery)
+        "Esp32_WebInterface_dns.c"             # Captive Portal e risoluzione nomi DNS locali
+    
+    INCLUDE_DIRS "."                           # Espone gli header (.h) della cartella corrente
+
     REQUIRES 
-        esp_http_server 
-        nvs_flash 
-        mqtt 
-        esp_wifi 
-        esp_netif 
-        esp_event 
-        lwip 
-        app_update
+        esp_http_server   # Fornisce le API per il server web integrato
+        nvs_flash         # Necessario per salvare configurazioni WiFi e MQTT
+        mqtt              # Client per la comunicazione con il broker
+        esp_wifi          # Stack driver per la connettività wireless
+        esp_netif         # Gestione interfacce di rete (indirizzi IP, DHCP)
+        esp_event         # Gestione degli eventi di sistema (WiFi connected/lost)
+        lwip              # Stack TCP/IP per socket e protocolli di rete
+        app_update        # Necessario per la gestione degli aggiornamenti firmware OTA
 )
